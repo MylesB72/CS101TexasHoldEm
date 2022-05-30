@@ -1,3 +1,4 @@
+from ctypes.wintypes import HACCEL
 import random
 from random import randint
 
@@ -29,7 +30,6 @@ class MyHand:
         self.numberOfCards = 0
         self.hand = []
         self.total = 0
-        self.firstTurn = True
 
     #displays players cards and score
     def __repr__(self):
@@ -50,11 +50,14 @@ class MyHand:
         self.hand.append([card, suit])
         deck.updateDeck(suit,card)
         self.updateScore(deck)
-        if self.firstTurn == False:
-            print(self)
-            self.turn(deck)
-        self.firstTurn == False
-        self.drawNewCard(deck)
+        self.displayHand()
+        self.turn(deck)
+
+    def displayHand(self):
+        print("You currently have: ")
+        for card in self.hand:
+            print("{} of {}s".format(card[0],card[1]))
+        print("Your score is {}".format(self.total))
 
     def checkLose(self):
         if self.total > 21:
@@ -62,7 +65,6 @@ class MyHand:
             
 
     def turn(self,deck):
-        print("Test")
         choice = input("Choose to H (hit), or S (stick) \n> ").upper()
         if "H" in choice:
             self.drawNewCard(deck)
