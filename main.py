@@ -6,7 +6,7 @@ class Card:
     def __init__(self):
         self.suits = ["Club","Spade","Heart","Diamond"]
         self.words = ["Ace","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King"]
-        self.numb = list(range(0,14))
+        self.numb = list(range(1,14))
         self.numbValues = dict(zip(self.words,self.numb))
         self.usedCards = {}
 
@@ -32,7 +32,7 @@ class MyHand:
 
     #displays players cards and score
     def __repr__(self):
-        return "{} has {} cards. These cards are {}. \n Your total is {}".format(self.name,self.numberOfCards,self.hand, self.total)
+        return "{} has {} cards. These cards are {}. \nYour total is {}".format(self.name,self.numberOfCards,self.hand, self.total)
 
     #draw a card and check to make sure that card hasn't already been drawn
     def drawNewCard(self,deck):
@@ -50,19 +50,17 @@ class MyHand:
         deck.updateDeck(suit,card)
         self.updateScore(deck)
         print(self)
-
     #draws 2 cards to begin game
     def startDraw(self, deck):
         for i in range(2):
             self.drawNewCard(deck)
 
+    #This function is currently adding the first card twice adding both values from the dict the second time. Remove the for loop and make it work on the last index of the list
     def updateScore(self,deck):
-        print(deck.numbValues)
-        for card in self.hand:
-            pointWord = card[0]
-            points = deck.numbValues[pointWord]
-            self.total += points
-            
+        card = self.hand[-1]
+        pointWord = card[0]
+        points = deck.numbValues[pointWord]
+        self.total += points
         
 
             
@@ -71,4 +69,3 @@ class MyHand:
 deck = Card()
 playerHand = MyHand()
 playerHand.startDraw(deck)
-
