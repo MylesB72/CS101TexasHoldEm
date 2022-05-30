@@ -31,6 +31,7 @@ class MyHand:
         self.numberOfCards = 0
         self.hand = []
         self.total = 0
+        self.firstTurn = True
 
     #displays players cards and score
     def __repr__(self):
@@ -51,7 +52,28 @@ class MyHand:
         self.hand.append([card, suit])
         deck.updateDeck(suit,card)
         self.updateScore(deck)
-        print(self)
+        if self.firstTurn == False:
+            print(self)
+            self.turn(deck)
+        elif self.firstTurn == True:
+            self.firstTurn == False
+
+    def checkLose(self):
+        if self.total > 21:
+            print("You have gone bust")
+            quit()
+
+    def turn(self,deck):
+        choice = input("Choose to H (hit), or S (stick) \n> ").upper()
+        self.checkLose()
+        if "H" in choice:
+            self.drawNewCard(deck)
+        elif "S" in choice:
+            print("Your total is {}".format(self.total))
+            print("You were {} away from 21".format(21-self.total))
+            quit()
+
+
     #draws 2 cards to begin game
     def startDraw(self, deck):
         for i in range(2):
@@ -63,12 +85,15 @@ class MyHand:
         pointWord = card[0]
         points = deck.numbValues[pointWord]
         self.total += points
+
+    
+
+
         
 
             
 
     
 deck = Card()
-print(len(deck.numb))
 playerHand = MyHand()
 playerHand.startDraw(deck)
