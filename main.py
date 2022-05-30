@@ -6,7 +6,9 @@ class Card:
     def __init__(self):
         self.suits = ["Club","Spade","Heart","Diamond"]
         self.words = ["Ace","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King"]
-        self.numb = list(range(1,14))
+        self.numb = list(range(1,11))
+        for i in range(3):
+            self.numb.append(10)
         self.numbValues = dict(zip(self.words,self.numb))
         self.usedCards = {}
 
@@ -67,5 +69,6 @@ class MyHand:
 
     
 deck = Card()
+print(len(deck.numb))
 playerHand = MyHand()
 playerHand.startDraw(deck)
