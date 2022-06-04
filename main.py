@@ -25,11 +25,14 @@ class Card:
         self.deck[suit].remove(card)
 
 class MyHand:
-    def __init__(self, name = "Player"):
+    def __init__(self, name = "Player", computer = False):
         self.name = name
         self.numberOfCards = 0
         self.hand = []
         self.total = 0
+        self.computer = computer
+        self.endTurn = False
+
 
     #displays players cards and score
     def __repr__(self):
@@ -50,8 +53,12 @@ class MyHand:
         self.hand.append([card, suit])
         deck.updateDeck(suit,card)
         self.updateScore(deck)
+        self.endTurn = self.checkLose()
         self.displayHand()
-        self.turn(deck)
+        if self.endTurn == False:
+            self.turn(deck)
+        else:
+            print("You were {} more than 21".format(self.total-21))
 
     def displayHand(self):
         print("You currently have: ")
@@ -61,16 +68,26 @@ class MyHand:
 
     def checkLose(self):
         if self.total > 21:
-            print("You have gone bust")
+            if self.computer == False:
+                print("You have gone bust")
+                return True
+            else:
+                print("The computer has gone bust")
+                return True
+        else:
+            return False
+            
             
 
     def turn(self,deck):
         choice = input("Choose to H (hit), or S (stick) \n> ").upper()
-        if "H" in choice:
+        if "H" in choice and self.endTurn == False:
             self.drawNewCard(deck)
-        elif "S" in choice:
+        elif "S" in choice and self.endTurn == False:
             print("Your total is {}".format(self.total))
             print("You were {} away from 21".format(21-self.total))
+        else: 
+            print("The turn is over")
             
     #draws 2 cards to begin game
     def startDraw(self, deck):
@@ -87,3 +104,4 @@ deck = Card()
 print(deck)
 playerHand = MyHand()
 playerHand.drawNewCard(deck)
+computerHand = MyHand()
