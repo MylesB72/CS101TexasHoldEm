@@ -1,6 +1,7 @@
 from ctypes.wintypes import HACCEL
 import random
 from random import randint
+from re import S
 
 class Card:
     #Generate a deck of cards
@@ -32,6 +33,7 @@ class MyHand:
         self.total = 0
         self.computer = computer
         self.endTurn = False
+        self.risk = 17
 
 
     #displays players cards and score
@@ -55,16 +57,20 @@ class MyHand:
         self.updateScore(deck)
         self.endTurn = self.checkLose()
         self.displayHand()
-        if self.endTurn == False:
-            self.turn(deck)
+        if self.computer == True:
+            self.computerTurn(deck)
         else:
-            print("You were {} more than 21".format(self.total-21))
+            if self.endTurn == False:
+                self.turn(deck)
+            else:
+                print("You were {} more than 21".format(self.total-21))
 
     def displayHand(self):
-        print("You currently have: ")
-        for card in self.hand:
-            print("{} of {}s".format(card[0],card[1]))
-        print("Your score is {}".format(self.total))
+        if self.computer == False:
+            print("You currently have: ")
+            for card in self.hand:
+                print("{} of {}s".format(card[0],card[1]))
+            print("Your score is {}".format(self.total))
 
     def checkLose(self):
         if self.total > 21:
@@ -78,6 +84,17 @@ class MyHand:
             return False
             
             
+    def computerTurn(self, deck):
+        if self.total < self.risk and self.endTurn == False:
+            self.drawNewCard(deck)
+        elif self.total > self.risk and self.endTurn == False:
+            print("The computer total is {}".format(self.total))
+            print("The computer was {} away from 21".format(21-self.total))
+        elif self.total == 21:
+            print("The computer got 21")
+        else:
+            print("The computer is {} more than 21".format(self.total-21))
+            print("The turn is over")
 
     def turn(self,deck):
         choice = input("Choose to H (hit), or S (stick) \n> ").upper()
@@ -100,8 +117,18 @@ class MyHand:
         points = deck.numbValues[pointWord]
         self.total += points
  
+def winner(player, computer):
+    if player.total > computer.total:
+        print("Player wins")
+    else:
+        print("Computer wins")
+
 deck = Card()
 print(deck)
+print("***\n\n\nPlayer's turn \n\n\n***")
 playerHand = MyHand()
 playerHand.drawNewCard(deck)
-computerHand = MyHand()
+print("***\n\n\nComputer's turn\n\n\n***")
+computerHand = MyHand(computer = True)
+computerHand.drawNewCard(deck)
+winner(playerHand,computerHand)
